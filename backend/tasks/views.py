@@ -1,12 +1,12 @@
 from rest_framework import viewsets
 from rest_framework.decorators import action
 from rest_framework.response import Response
-from .models import Task
+from .models import TaskJob
 from .serializers import TaskJobSerializer
 from django.utils import timezone
 
 class TaskJobViewSet(viewsets.ModelViewSet):
-    queryset = Task.objects.all()
+    queryset = TaskJob.objects.all()
     serializer_class = TaskJobSerializer
 
     @action(detail=True, methods=['post'])
