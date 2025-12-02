@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from .models import TaskJob
 from .serializers import TaskJobSerializer
 from django.utils import timezone
+from .tasks import execute_task
 
 class TaskJobViewSet(viewsets.ModelViewSet):
     queryset = TaskJob.objects.all()
@@ -20,4 +21,8 @@ class TaskJobViewSet(viewsets.ModelViewSet):
         task.completed = False
         task.save()
         return Response({"status": f"Task {task.id} started"})
+    
+    def perform_create(self, serializer):
+        task = serializer.save()
+        execute_task.delay(task.id)
 
